@@ -27,7 +27,7 @@ interface AssessmentState {
 }
 
 interface AssessmentContextType extends AssessmentState {
-  setTool: (tool: ToolModule) => void;
+  setTool: (tool: ToolModule | null) => void;
   setStep: (step: AssessmentStep) => void;
   setEmployeeInfo: (info: EmployeeInfo) => void;
   setResponse: (questionId: string, value: string, textComment?: string) => void;
@@ -65,7 +65,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     photoDataUrl: null,
   });
 
-  const setTool = useCallback((tool: ToolModule) => {
+  const setTool = useCallback((tool: ToolModule | null) => {
     setState((s) => ({
       ...s,
       tool,

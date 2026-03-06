@@ -1,17 +1,22 @@
 /**
  * Platform Home — Tool Selector
  * Sabine brand design: deep navy hero, orange CTA, teal secondary, Roboto/Open Sans.
+ * Navigation is now handled by App.tsx — this component receives onNavigate and onSelectTool as props.
  */
 
-import { useState } from "react";
+import { motion } from "framer-motion";
 import { useAssessment } from "@/contexts/AssessmentContext";
 import { TOOL_REGISTRY } from "@/modules/registry";
 import {
   Shield, ArrowRight, Monitor, Home, Clock, Flame, Zap,
-  AlertTriangle, Brain, Eye, User, Wrench, ChevronRight
+  AlertTriangle, Brain, Eye, User, Wrench, ChevronRight,
+  FileText, Globe, BarChart3
 } from "lucide-react";
-import { motion } from "framer-motion";
-import RiskBuilderPage from "@/modules/risk-builder/RiskBuilderPage";
+
+interface PlatformHomeProps {
+  onNavigate?: (page: string) => void;
+  onSelectTool?: (toolId: string) => void;
+}
 
 const iconMap: Record<string, React.ReactNode> = {
   Monitor:       <Monitor className="w-6 h-6" />,
@@ -27,33 +32,32 @@ const iconMap: Record<string, React.ReactNode> = {
   Wrench:        <Wrench className="w-6 h-6" />,
 };
 
-// Tool accent colours — all derived from Sabine brand palette
 const toolAccentBg: Record<string, string> = {
-  "ergonomic":    "bg-[#1A2B5F]",   // navy
-  "home-office":  "bg-[#4C99B0]",   // teal
-  "psychosocial": "bg-[#D96C34]",   // orange CTA
-  "risk-builder": "bg-[#12204A]",   // dark navy
+  "ergonomic":    "#1A2B5F",
+  "home-office":  "#2A9D8F",
+  "psychosocial": "#D96C34",
+  "risk-builder": "#12204A",
 };
 
-const toolBorderHover: Record<string, string> = {
-  "ergonomic":    "hover:border-[#1A2B5F]",
-  "home-office":  "hover:border-[#4C99B0]",
-  "psychosocial": "hover:border-[#D96C34]",
-  "risk-builder": "hover:border-[#12204A]",
+const toolAccentLight: Record<string, string> = {
+  "ergonomic":    "rgba(26,43,95,0.07)",
+  "home-office":  "rgba(42,157,143,0.07)",
+  "psychosocial": "rgba(217,108,52,0.07)",
+  "risk-builder": "rgba(18,32,74,0.06)",
 };
 
-const toolTagBg: Record<string, string> = {
-  "ergonomic":    "bg-blue-50 text-[#1A2B5F]",
-  "home-office":  "bg-teal-50 text-[#39798B]",
-  "psychosocial": "bg-orange-50 text-[#C45A2B]",
-  "risk-builder": "bg-slate-100 text-[#12204A]",
+const toolTagStyle: Record<string, React.CSSProperties> = {
+  "ergonomic":    { backgroundColor: "rgba(26,43,95,0.08)", color: "#1A2B5F" },
+  "home-office":  { backgroundColor: "rgba(42,157,143,0.08)", color: "#1D7A6E" },
+  "psychosocial": { backgroundColor: "rgba(217,108,52,0.08)", color: "#B85A28" },
+  "risk-builder": { backgroundColor: "rgba(18,32,74,0.06)", color: "#12204A" },
 };
 
-const toolButtonStyle: Record<string, string> = {
-  "ergonomic":    "bg-[#1A2B5F] hover:bg-[#12204A] text-white",
-  "home-office":  "bg-[#4C99B0] hover:bg-[#39798B] text-white",
-  "psychosocial": "bg-[#D96C34] hover:bg-[#C45A2B] text-white",
-  "risk-builder": "bg-[#12204A] hover:bg-[#0e1836] text-white",
+const toolTags: Record<string, string> = {
+  "ergonomic":    "Workstation Safety",
+  "home-office":  "Remote Work",
+  "psychosocial": "Mental Health & Wellbeing",
+  "risk-builder": "Custom Risk Register",
 };
 
 const stats = [
@@ -63,59 +67,31 @@ const stats = [
   { number: "PDF", label: "Audit Reports" },
 ];
 
-export default function PlatformHome() {
+const features = [
+  { icon: <FileText className="w-5 h-5" />, title: "Instant PDF Reports", desc: "Professional compliance reports generated immediately after each assessment — no waiting, no uploads." },
+  { icon: <Globe className="w-5 h-5" />, title: "6 Jurisdictions", desc: "Ireland, UK, Germany, Switzerland, Denmark, and Australia — correct legislation included automatically." },
+  { icon: <BarChart3 className="w-5 h-5" />, title: "Weighted Scoring", desc: "ISO-aligned weighted scoring engine produces consistent, auditable risk ratings across all tools." },
+  { icon: <Shield className="w-5 h-5" />, title: "Audit-Ready", desc: "Every report is structured to meet the documentation requirements of HSA, HSE, and ISO 45001 inspections." },
+];
+
+export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeProps) {
   const { setTool, setStep } = useAssessment();
-  const [activeBuilder, setActiveBuilder] = useState<string | null>(null);
 
   function handleSelectTool(toolId: string) {
-    const tool = TOOL_REGISTRY.find((t) => t.id === toolId);
-    if (!tool) return;
-    if (tool.isBuilder) {
-      setActiveBuilder(toolId);
+    if (onSelectTool) {
+      onSelectTool(toolId);
     } else {
-      setTool(tool);
-      setStep("welcome");
+      // Fallback for standalone use
+      const tool = TOOL_REGISTRY.find(t => t.id === toolId);
+      if (tool && !tool.isBuilder) {
+        setTool(tool);
+        setStep("welcome");
+      }
     }
   }
 
-  if (activeBuilder === "risk-builder") {
-    return <RiskBuilderPage onBack={() => setActiveBuilder(null)} />;
-  }
-
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "var(--sabine-bg)", fontFamily: "'Open Sans', sans-serif" }}>
-
-      {/* ── Navigation ── */}
-      <nav style={{ backgroundColor: "var(--sabine-navy)" }} className="sticky top-0 z-20 shadow-lg">
-        <div className="container py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: "var(--sabine-cta)" }}>
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-white leading-none" style={{ fontFamily: "'Roboto', sans-serif" }}>
-                Workplace Risk Platform
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>
-                Compliance Assessment Tools
-              </p>
-            </div>
-          </div>
-          <div className="hidden md:flex items-center gap-6">
-            <span className="text-sm text-white/70 hover:text-white cursor-pointer transition-colors" style={{ fontFamily: "'Roboto', sans-serif" }}>Tools</span>
-            <span className="text-sm text-white/70 hover:text-white cursor-pointer transition-colors" style={{ fontFamily: "'Roboto', sans-serif" }}>Reports</span>
-            <span className="text-sm text-white/70 hover:text-white cursor-pointer transition-colors" style={{ fontFamily: "'Roboto', sans-serif" }}>About</span>
-            <button
-              className="text-sm font-semibold px-5 py-2 rounded-lg transition-all"
-              style={{ backgroundColor: "var(--sabine-cta)", color: "#fff", fontFamily: "'Roboto', sans-serif" }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta-hover)")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta)")}
-            >
-              Contact
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div style={{ backgroundColor: "var(--sabine-bg)", fontFamily: "'Open Sans', sans-serif" }}>
 
       {/* ── Hero ── */}
       <section style={{ backgroundColor: "var(--sabine-navy)" }} className="pb-20 pt-16">
@@ -145,6 +121,7 @@ export default function PlatformHome() {
                   Start an Assessment <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
+                  onClick={() => onNavigate?.("about")}
                   className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border"
                   style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff", fontFamily: "'Roboto', sans-serif", backgroundColor: "transparent" }}
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")}
@@ -161,12 +138,12 @@ export default function PlatformHome() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl"
+            className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4"
           >
-            {stats.map((s, i) => (
-              <div key={i} className="text-center">
-                <p className="text-3xl font-bold" style={{ color: "var(--sabine-cta)", fontFamily: "'Roboto', sans-serif" }}>{s.number}</p>
-                <p className="text-xs mt-1 uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.55)", fontFamily: "'Roboto', sans-serif" }}>{s.label}</p>
+            {stats.map((s) => (
+              <div key={s.label} className="text-center py-4 rounded-xl" style={{ backgroundColor: "rgba(255,255,255,0.07)" }}>
+                <p className="text-3xl font-black text-white" style={{ fontFamily: "'Roboto', sans-serif" }}>{s.number}</p>
+                <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.55)" }}>{s.label}</p>
               </div>
             ))}
           </motion.div>
@@ -174,104 +151,150 @@ export default function PlatformHome() {
       </section>
 
       {/* ── Tool Cards ── */}
-      <section className="container py-16">
-        <div className="mb-10">
-          <p className="section-label mb-2">Assessment Tools</p>
-          <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-            Select your assessment
-          </h2>
-        </div>
+      <section className="py-16">
+        <div className="container">
+          <div className="text-center mb-10">
+            <p className="section-label mb-2">Assessment Tools</p>
+            <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
+              Choose your assessment
+            </h2>
+            <p className="text-sm mt-3 max-w-xl mx-auto" style={{ color: "var(--sabine-muted-text)" }}>
+              Each tool generates a professional PDF compliance report immediately on completion.
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {TOOL_REGISTRY.map((tool, i) => (
-            <motion.div
-              key={tool.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.08 * i }}
-              onClick={() => handleSelectTool(tool.id)}
-              className={`brand-card cursor-pointer group ${toolBorderHover[tool.id] ?? "hover:border-gray-400"}`}
-            >
-              {/* Icon + arrow */}
-              <div className="flex items-start justify-between mb-5">
-                <div className={`tool-icon-badge ${toolAccentBg[tool.id] ?? "bg-gray-600"}`}>
-                  {iconMap[tool.icon] ?? <Shield className="w-6 h-6" />}
-                </div>
-                <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-gray-500 group-hover:translate-x-1 transition-all" />
-              </div>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {TOOL_REGISTRY.map((tool, i) => {
+              const accentBg = toolAccentBg[tool.id] ?? "#1A2B5F";
+              const accentLight = toolAccentLight[tool.id] ?? "rgba(26,43,95,0.07)";
+              const tagStyle = toolTagStyle[tool.id] ?? {};
+              const tag = toolTags[tool.id] ?? "";
 
-              {/* Name + description */}
-              <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-                {tool.name}
-              </h3>
-              <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--sabine-muted-text)" }}>
-                {tool.description}
-              </p>
-
-              {/* Category tags */}
-              <div className="flex flex-wrap gap-1.5 mb-5">
-                {tool.isBuilder
-                  ? ["Slips & Trips", "Manual Handling", "Fire", "Electrical", "Chemicals", "Height", "Stress", "Custom"].map((label) => (
-                      <span key={label} className={`text-xs px-2 py-0.5 rounded-full font-medium ${toolTagBg[tool.id] ?? "bg-gray-100 text-gray-600"}`}>
-                        {label}
-                      </span>
-                    ))
-                  : tool.categories.map((cat) => (
-                      <span key={cat.id} className={`text-xs px-2 py-0.5 rounded-full font-medium ${toolTagBg[tool.id] ?? "bg-gray-100 text-gray-600"}`}>
-                        {cat.title}
-                      </span>
-                    ))
-                }
-              </div>
-
-              {/* Footer */}
-              <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: "var(--sabine-border)" }}>
-                <div className="flex gap-3 text-xs" style={{ color: "var(--sabine-muted-text)" }}>
-                  {tool.isBuilder ? (
-                    <><span>9 hazard types</span><span>·</span><span>5×5 matrix</span></>
-                  ) : (
-                    <><span>{tool.categories.reduce((s, c) => s + c.questions.filter(q => q.type !== "text_comment").length, 0)} questions</span><span>·</span><span>{tool.categories.length} categories</span></>
-                  )}
-                </div>
-                <button
-                  onClick={(e) => { e.stopPropagation(); handleSelectTool(tool.id); }}
-                  className={`text-xs font-semibold px-4 py-1.5 rounded-lg transition-all ${toolButtonStyle[tool.id] ?? "bg-gray-600 text-white"}`}
-                  style={{ fontFamily: "'Roboto', sans-serif" }}
+              return (
+                <motion.div
+                  key={tool.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  className="rounded-2xl overflow-hidden cursor-pointer group transition-all"
+                  style={{
+                    backgroundColor: "var(--sabine-card)",
+                    border: "1px solid var(--sabine-border)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                  }}
+                  onClick={() => handleSelectTool(tool.id)}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px rgba(0,0,0,0.12)`;
+                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
+                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(0)";
+                  }}
                 >
-                  {tool.isBuilder ? "Build" : "Start"}
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                  {/* Card header */}
+                  <div className="px-6 py-5 flex items-center gap-4" style={{ backgroundColor: accentLight, borderBottom: "1px solid var(--sabine-border)" }}>
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-white" style={{ backgroundColor: accentBg }}>
+                      {iconMap[tool.icon ?? "Shield"] ?? <Shield className="w-6 h-6" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-0.5">
+                        <h3 className="font-bold text-base truncate" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>{tool.name}</h3>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0" style={tagStyle}>{tag}</span>
+                      </div>
+                      <p className="text-xs" style={{ color: "var(--sabine-muted-text)" }}>{tool.description}</p>
+                    </div>
+                  </div>
+
+                  {/* Card body */}
+                  <div className="px-6 py-4 flex items-center justify-between">
+                    <div className="flex flex-wrap gap-3">
+                      {tool.categories?.slice(0, 3).map((cat: string) => (
+                        <span key={cat} className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--sabine-muted)", color: "var(--sabine-muted-text)" }}>
+                          {cat}
+                        </span>
+                      ))}
+                      {(tool.categories?.length ?? 0) > 3 && (
+                        <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--sabine-muted)", color: "var(--sabine-muted-text)" }}>
+                          +{(tool.categories?.length ?? 0) - 3} more
+                        </span>
+                      )}
+                    </div>
+                    <ChevronRight className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-1" style={{ color: accentBg }} />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="text-center mt-8">
+            <button
+              onClick={() => onNavigate?.("tools")}
+              className="inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+              style={{ color: "var(--sabine-cta)", fontFamily: "'Roboto', sans-serif" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--sabine-cta-hover)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "var(--sabine-cta)")}
+            >
+              View detailed tool descriptions <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* ── Jurisdiction Strip ── */}
-      <section style={{ backgroundColor: "var(--sabine-muted)" }} className="py-10 border-y" style={{ borderColor: "var(--sabine-border)", backgroundColor: "var(--sabine-muted)" }}>
-        <div className="container text-center">
-          <p className="section-label mb-4">Compliance Coverage</p>
-          <div className="flex flex-wrap justify-center gap-6 text-sm font-medium" style={{ color: "var(--sabine-text)", fontFamily: "'Roboto', sans-serif" }}>
-            {["🇮🇪 Ireland", "🇬🇧 United Kingdom", "🇩🇪 Germany", "🇨🇭 Switzerland", "🇩🇰 Denmark", "🇦🇺 Australia"].map((j) => (
-              <span key={j} className="flex items-center gap-1">{j}</span>
+      {/* ── Features ── */}
+      <section className="py-14" style={{ backgroundColor: "var(--sabine-card)", borderTop: "1px solid var(--sabine-border)", borderBottom: "1px solid var(--sabine-border)" }}>
+        <div className="container">
+          <div className="text-center mb-10">
+            <p className="section-label mb-2">Platform Features</p>
+            <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
+              Built for real-world compliance
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {features.map((f) => (
+              <div key={f.title} className="rounded-xl border p-5" style={{ backgroundColor: "var(--sabine-bg)", borderColor: "var(--sabine-border)" }}>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ backgroundColor: "rgba(217,108,52,0.1)", color: "var(--sabine-cta)" }}>
+                  {f.icon}
+                </div>
+                <p className="font-semibold text-sm mb-1.5" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>{f.title}</p>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>{f.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer style={{ backgroundColor: "var(--sabine-navy)" }} className="py-8">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded flex items-center justify-center" style={{ backgroundColor: "var(--sabine-cta)" }}>
-              <Shield className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-sm font-semibold text-white" style={{ fontFamily: "'Roboto', sans-serif" }}>Workplace Risk Platform</span>
-          </div>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
-            For informational and compliance guidance purposes only. Not a substitute for professional legal advice.
+      {/* ── CTA ── */}
+      <section className="py-16" style={{ backgroundColor: "var(--sabine-navy)" }}>
+        <div className="container text-center">
+          <h2 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
+            Ready to get started?
+          </h2>
+          <p className="text-base mb-8 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Open Sans', sans-serif" }}>
+            Complete your first assessment in under 15 minutes and download a professional PDF compliance report immediately.
           </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <button
+              onClick={() => handleSelectTool("ergonomic")}
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white transition-all"
+              style={{ backgroundColor: "var(--sabine-cta)", fontFamily: "'Roboto', sans-serif" }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta-hover)")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta)")}
+            >
+              Start an Assessment <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onNavigate?.("contact")}
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold border transition-all"
+              style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff", fontFamily: "'Roboto', sans-serif", backgroundColor: "transparent" }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
+            >
+              Talk to Us
+            </button>
+          </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 }
