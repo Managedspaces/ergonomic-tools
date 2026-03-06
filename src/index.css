@@ -1,0 +1,339 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ── Google Fonts: Roboto (headings) + Open Sans (body) ── */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Sabine Brand Tokens ── */
+:root {
+  /* Brand Colours */
+  --sabine-navy:          #1A2B5F;   /* Hero / header background */
+  --sabine-navy-dark:     #12204A;   /* Darker navy for depth */
+  --sabine-navy-mid:      #243570;   /* Mid navy for hover states */
+  --sabine-cta:           #D96C34;   /* Primary CTA — warm orange */
+  --sabine-cta-hover:     #C45A2B;   /* CTA hover */
+  --sabine-teal:          #4C99B0;   /* Secondary / links / accents */
+  --sabine-teal-hover:    #39798B;   /* Secondary hover */
+  --sabine-text:          #1F1F1F;   /* Dark charcoal body text */
+  --sabine-bg:            #FAFAFA;   /* Page background */
+  --sabine-card:          #FFFFFF;   /* Card / panel background */
+  --sabine-border:        #E0E0E0;   /* Borders / dividers */
+  --sabine-muted:         #F4F4F4;   /* Muted backgrounds */
+  --sabine-muted-text:    #6B7280;   /* Muted text */
+
+  /* Semantic Risk Colours */
+  --sabine-risk-low:      #2ECC71;   /* Green */
+  --sabine-risk-moderate: #FFA500;   /* Amber */
+  --sabine-risk-high:     #FF5A3C;   /* Red-orange */
+  --sabine-risk-critical: #DC2626;   /* Deep red */
+  --sabine-risk-neutral:  #E0E0E0;   /* No data / disabled */
+
+  /* Tailwind/shadcn token mapping */
+  --radius: 0.5rem;
+  --background:              var(--sabine-bg);
+  --foreground:              var(--sabine-text);
+  --card:                    var(--sabine-card);
+  --card-foreground:         var(--sabine-text);
+  --popover:                 var(--sabine-card);
+  --popover-foreground:      var(--sabine-text);
+  --primary:                 var(--sabine-cta);
+  --primary-foreground:      #FFFFFF;
+  --secondary:               var(--sabine-muted);
+  --secondary-foreground:    var(--sabine-text);
+  --muted:                   var(--sabine-muted);
+  --muted-foreground:        var(--sabine-muted-text);
+  --accent:                  var(--sabine-teal);
+  --accent-foreground:       #FFFFFF;
+  --destructive:             var(--sabine-risk-critical);
+  --destructive-foreground:  #FFFFFF;
+  --border:                  var(--sabine-border);
+  --input:                   var(--sabine-border);
+  --ring:                    var(--sabine-cta);
+
+  /* Chart colours mapped to risk semantic */
+  --chart-1: var(--sabine-risk-low);
+  --chart-2: var(--sabine-risk-moderate);
+  --chart-3: var(--sabine-risk-high);
+  --chart-4: var(--sabine-risk-critical);
+  --chart-5: var(--sabine-teal);
+
+  /* Sidebar */
+  --sidebar:                    var(--sabine-navy);
+  --sidebar-foreground:         #FFFFFF;
+  --sidebar-primary:            var(--sabine-cta);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:             var(--sabine-navy-mid);
+  --sidebar-accent-foreground:  #FFFFFF;
+  --sidebar-border:             rgba(255,255,255,0.1);
+  --sidebar-ring:               var(--sabine-cta);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background:         var(--background);
+  --color-foreground:         var(--foreground);
+  --color-card:               var(--card);
+  --color-card-foreground:    var(--card-foreground);
+  --color-popover:            var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary:            var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary:          var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:              var(--muted);
+  --color-muted-foreground:   var(--muted-foreground);
+  --color-accent:             var(--accent);
+  --color-accent-foreground:  var(--accent-foreground);
+  --color-destructive:        var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:             var(--border);
+  --color-input:              var(--input);
+  --color-ring:               var(--ring);
+  --color-chart-1:            var(--chart-1);
+  --color-chart-2:            var(--chart-2);
+  --color-chart-3:            var(--chart-3);
+  --color-chart-4:            var(--chart-4);
+  --color-chart-5:            var(--chart-5);
+  --color-sidebar:            var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary:    var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent:     var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border:     var(--sidebar-border);
+  --color-sidebar-ring:       var(--sidebar-ring);
+
+  /* Brand colour utilities */
+  --color-navy:          var(--sabine-navy);
+  --color-navy-dark:     var(--sabine-navy-dark);
+  --color-navy-mid:      var(--sabine-navy-mid);
+  --color-cta:           var(--sabine-cta);
+  --color-cta-hover:     var(--sabine-cta-hover);
+  --color-teal:          var(--sabine-teal);
+  --color-teal-hover:    var(--sabine-teal-hover);
+  --color-risk-low:      var(--sabine-risk-low);
+  --color-risk-moderate: var(--sabine-risk-moderate);
+  --color-risk-high:     var(--sabine-risk-high);
+  --color-risk-critical: var(--sabine-risk-critical);
+  --color-risk-neutral:  var(--sabine-risk-neutral);
+
+  /* Typography */
+  --font-sans:    'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    background-color: var(--sabine-bg);
+    color: var(--sabine-text);
+    font-family: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+    color: var(--sabine-text);
+    font-weight: 700;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    cursor: pointer;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--sabine-cta);
+    box-shadow: 0 0 0 3px rgba(217, 108, 52, 0.2);
+    outline: none;
+  }
+  input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--sabine-cta);
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+  @media (min-width: 640px) {
+    .container { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .container { padding-left: 2rem; padding-right: 2rem; max-width: 1280px; }
+  }
+
+  /* ── Brand Typography ── */
+  .font-heading {
+    font-family: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+  }
+  .font-body {
+    font-family: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+  .font-data {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  /* ── Brand Buttons ── */
+  .btn-primary {
+    background-color: var(--sabine-cta);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  .btn-primary:hover {
+    background-color: var(--sabine-cta-hover);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background-color: var(--sabine-teal);
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    transition: background-color 0.2s ease;
+  }
+  .btn-secondary:hover {
+    background-color: var(--sabine-teal-hover);
+  }
+
+  /* ── Navy Hero Section ── */
+  .hero-navy {
+    background-color: var(--sabine-navy);
+    color: #FFFFFF;
+  }
+  .hero-navy h1, .hero-navy h2, .hero-navy h3 {
+    color: #FFFFFF;
+  }
+
+  /* ── Brand Cards ── */
+  .brand-card {
+    background-color: var(--sabine-card);
+    border: 1px solid var(--sabine-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .brand-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    border-color: var(--sabine-cta);
+    transform: translateY(-2px);
+  }
+  .brand-card.active {
+    border-color: var(--sabine-cta);
+    box-shadow: 0 4px 12px rgba(217,108,52,0.2);
+  }
+
+  /* ── Risk Indicators ── */
+  .risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .risk-badge-low      { background-color: #D1FAE5; color: #065F46; }
+  .risk-badge-moderate { background-color: #FEF3C7; color: #92400E; }
+  .risk-badge-high     { background-color: #FFEDD5; color: #9A3412; }
+  .risk-badge-critical { background-color: #FEE2E2; color: #991B1B; }
+
+  /* ── Progress Bars ── */
+  .progress-track {
+    background-color: var(--sabine-border);
+    border-radius: 9999px;
+    overflow: hidden;
+    height: 10px;
+  }
+  .progress-fill-low      { background-color: var(--sabine-risk-low);      height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
+  .progress-fill-moderate { background-color: var(--sabine-risk-moderate); height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
+  .progress-fill-high     { background-color: var(--sabine-risk-high);     height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
+  .progress-fill-critical { background-color: var(--sabine-risk-critical); height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
+
+  /* ── Section Label (uppercase tracking) ── */
+  .section-label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sabine-muted-text);
+  }
+  .section-label-light {
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ── Stat Callout (large number + label) ── */
+  .stat-callout {
+    text-align: center;
+  }
+  .stat-callout .stat-number {
+    font-family: 'Roboto', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--sabine-cta);
+    line-height: 1;
+  }
+  .stat-callout .stat-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.875rem;
+    color: var(--sabine-muted-text);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Tool Icon Badge ── */
+  .tool-icon-badge {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+  }
+
+  /* ── Accessibility ── */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
