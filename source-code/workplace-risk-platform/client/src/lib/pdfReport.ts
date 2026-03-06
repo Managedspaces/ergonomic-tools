@@ -43,7 +43,7 @@ function addFooter(doc: jsPDF, pageNum: number, totalPages: number) {
   doc.line(15, y - 3, 195, y - 3);
   doc.setTextColor(150, 150, 150);
   doc.setFontSize(7);
-  doc.text("Ergonomic Risk Self-Assessment Tool — For informational purposes only. Does not constitute medical advice.", 15, y);
+  doc.text("Workplace Risk Platform — For informational purposes only. Does not constitute medical or legal advice.", 15, y);
   doc.text(`Page ${pageNum} of ${totalPages}`, 195, y, { align: "right" });
 }
 
