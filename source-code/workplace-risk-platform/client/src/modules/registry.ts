@@ -11,12 +11,13 @@
 import type { ToolModule } from "@/lib/shared/types";
 import { ERGONOMIC_TOOL } from "./ergonomic";
 import { HOME_OFFICE_TOOL } from "./home-office";
+import { PSYCHOSOCIAL_TOOL } from "./psychosocial";
 
 export const TOOL_REGISTRY: ToolModule[] = [
   ERGONOMIC_TOOL,
   HOME_OFFICE_TOOL,
+  PSYCHOSOCIAL_TOOL,
   // Future tools:
-  // STRESS_TOOL,
   // RISK_BUILDER_TOOL,
 ];
 

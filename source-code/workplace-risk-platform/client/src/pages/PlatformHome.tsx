@@ -25,13 +25,15 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const toolColors: Record<string, string> = {
-  "ergonomic":   "from-blue-50 to-indigo-50 border-blue-200 hover:border-blue-400",
-  "home-office": "from-emerald-50 to-teal-50 border-emerald-200 hover:border-emerald-400",
+  "ergonomic":      "from-blue-50 to-indigo-50 border-blue-200 hover:border-blue-400",
+  "home-office":    "from-emerald-50 to-teal-50 border-emerald-200 hover:border-emerald-400",
+  "psychosocial":   "from-violet-50 to-purple-50 border-violet-200 hover:border-violet-400",
 };
 
 const toolAccents: Record<string, string> = {
-  "ergonomic":   "bg-blue-600",
-  "home-office": "bg-emerald-600",
+  "ergonomic":      "bg-blue-600",
+  "home-office":    "bg-emerald-600",
+  "psychosocial":   "bg-violet-600",
 };
 
 export default function PlatformHome() {
@@ -84,7 +86,7 @@ export default function PlatformHome() {
 
       {/* Tool Cards */}
       <section className="container pb-20">
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl">
           {TOOL_REGISTRY.map((tool, i) => (
             <motion.div
               key={tool.id}
@@ -136,20 +138,7 @@ export default function PlatformHome() {
             </motion.div>
           ))}
 
-          {/* Coming Soon Placeholder */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="rounded-xl border-2 border-dashed border-border/50 bg-muted/20 p-6 flex flex-col items-center justify-center text-center min-h-[280px]"
-          >
-            <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center mb-4">
-              <Brain className="w-6 h-6 text-muted-foreground" />
-            </div>
-            <p className="text-sm font-medium text-muted-foreground mb-1">Stress Risk Assessment</p>
-            <p className="text-xs text-muted-foreground/70">Coming soon</p>
-          </motion.div>
-
+          {/* Coming Soon — Risk Builder */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
