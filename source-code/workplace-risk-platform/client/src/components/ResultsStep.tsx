@@ -1,11 +1,10 @@
 /**
- * Results Step — Assessment results dashboard with category breakdowns
+ * Results Step — Tool-agnostic assessment results dashboard
  * Design: Clinical Precision — Swiss Medical Design
  */
 
 import { useAssessment } from "@/contexts/AssessmentContext";
-import { getActionTimeline } from "@/lib/scoring";
-import { getComplianceTemplate } from "@/lib/compliance";
+import { getActionTimeline } from "@/lib/shared/scoring";
 import { generateEmployeePDF, generateEmployerPDF } from "@/lib/pdfReport";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,52 +13,53 @@ import { Badge } from "@/components/ui/badge";
 import {
   Shield, Download, RotateCcw, FileText, Building2,
   AlertTriangle, CheckCircle2, AlertCircle, XCircle,
-  Monitor, User, Clock, Sun, Eye, Brain, ChevronDown, ChevronUp,
+  Monitor, Home, Clock, Flame, Zap, AlertTriangle as AT, Brain, Eye, User, Sun,
+  ChevronDown, ChevronUp,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const RESULTS_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663036985142/fhRLT49Ux3ps8Kx65JURu8/results-bg-CSTLfNXVmjXCdtUtZSosFD.webp";
-
 const iconMap: Record<string, React.ReactNode> = {
-  Monitor: <Monitor className="w-5 h-5" />,
-  User: <User className="w-5 h-5" />,
-  Clock: <Clock className="w-5 h-5" />,
-  Sun: <Sun className="w-5 h-5" />,
-  Eye: <Eye className="w-5 h-5" />,
-  Brain: <Brain className="w-5 h-5" />,
+  Monitor:       <Monitor className="w-5 h-5" />,
+  Home:          <Home className="w-5 h-5" />,
+  Clock:         <Clock className="w-5 h-5" />,
+  Flame:         <Flame className="w-5 h-5" />,
+  Zap:           <Zap className="w-5 h-5" />,
+  AlertTriangle: <AlertTriangle className="w-5 h-5" />,
+  Brain:         <Brain className="w-5 h-5" />,
+  Eye:           <Eye className="w-5 h-5" />,
+  User:          <User className="w-5 h-5" />,
+  Sun:           <Sun className="w-5 h-5" />,
+  Shield:        <Shield className="w-5 h-5" />,
 };
 
 const ratingIcons: Record<string, React.ReactNode> = {
-  low: <CheckCircle2 className="w-5 h-5" />,
+  low:      <CheckCircle2 className="w-5 h-5" />,
   moderate: <AlertCircle className="w-5 h-5" />,
-  high: <AlertTriangle className="w-5 h-5" />,
+  high:     <AlertTriangle className="w-5 h-5" />,
   critical: <XCircle className="w-5 h-5" />,
 };
 
 const ratingBgColors: Record<string, string> = {
-  low: "bg-[#2D6A4F]/10 text-[#2D6A4F] border-[#2D6A4F]/20",
+  low:      "bg-[#2D6A4F]/10 text-[#2D6A4F] border-[#2D6A4F]/20",
   moderate: "bg-[#D4A017]/10 text-[#D4A017] border-[#D4A017]/20",
-  high: "bg-[#C44536]/10 text-[#C44536] border-[#C44536]/20",
+  high:     "bg-[#C44536]/10 text-[#C44536] border-[#C44536]/20",
   critical: "bg-[#9B2226]/10 text-[#9B2226] border-[#9B2226]/20",
 };
 
-import { CATEGORIES } from "@/lib/questionnaire";
-
 export default function ResultsStep() {
-  const { result, employeeInfo, responses, resetAssessment, photoDataUrl } = useAssessment();
+  const { tool, result, employeeInfo, responses, resetAssessment, photoDataUrl } = useAssessment();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-  if (!result) return null;
+  if (!result || !tool) return null;
 
-  const compliance = getComplianceTemplate(employeeInfo.country);
+  const compliance = tool.getComplianceTemplate(employeeInfo.country);
 
   const toggleCategory = (id: string) => {
     setExpandedCategories((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
   };
@@ -86,20 +86,19 @@ export default function ResultsStep() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src={RESULTS_BG} alt="" className="w-full h-full object-cover opacity-5" />
-        </div>
         <div className="relative z-10 container py-8">
           <nav className="flex items-center justify-between mb-10">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                 <Shield className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
-                Assessment Results
-              </span>
+              <div>
+                <span className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+                  Assessment Results
+                </span>
+                <p className="text-xs text-muted-foreground">{tool.name}</p>
+              </div>
             </div>
             <Button variant="ghost" size="sm" onClick={resetAssessment} className="gap-2 text-muted-foreground">
               <RotateCcw className="w-4 h-4" />
@@ -109,11 +108,7 @@ export default function ResultsStep() {
 
           <div className="max-w-4xl mx-auto">
             {/* Overall Score Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <Card className="border-2 overflow-hidden" style={{ borderColor: result.overallRatingColor + "40" }}>
                 <CardContent className="p-8">
                   <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
@@ -140,10 +135,7 @@ export default function ResultsStep() {
 
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <Badge
-                          className={`text-sm px-3 py-1 font-medium border ${ratingBgColors[result.overallRating]}`}
-                          variant="outline"
-                        >
+                        <Badge className={`text-sm px-3 py-1 font-medium border ${ratingBgColors[result.overallRating]}`} variant="outline">
                           {ratingIcons[result.overallRating]}
                           <span className="ml-1.5">{result.overallRatingLabel}</span>
                         </Badge>
@@ -168,9 +160,7 @@ export default function ResultsStep() {
 
             {/* PDF Download Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}
               className="flex flex-wrap gap-3 mt-6"
             >
               <Button onClick={handleEmployeePDF} variant="outline" className="gap-2">
@@ -190,7 +180,7 @@ export default function ResultsStep() {
               </h2>
 
               {result.categoryScores.map((cs, i) => {
-                const cat = CATEGORIES.find((c) => c.id === cs.categoryId);
+                const cat = tool.categories.find((c) => c.id === cs.categoryId);
                 const isExpanded = expandedCategories.has(cs.categoryId);
 
                 return (
@@ -201,15 +191,12 @@ export default function ResultsStep() {
                     transition={{ duration: 0.3, delay: 0.05 * i }}
                   >
                     <Card className="overflow-hidden">
-                      <button
-                        onClick={() => toggleCategory(cs.categoryId)}
-                        className="w-full text-left"
-                      >
+                      <button onClick={() => toggleCategory(cs.categoryId)} className="w-full text-left">
                         <CardHeader className="p-4 pb-3">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: cs.ratingColor + "15", color: cs.ratingColor }}>
-                                {cat && iconMap[cat.icon]}
+                                {cat && (iconMap[cat.icon] ?? <Shield className="w-5 h-5" />)}
                               </div>
                               <div>
                                 <CardTitle className="text-sm font-semibold">{cs.categoryTitle}</CardTitle>
@@ -223,22 +210,15 @@ export default function ResultsStep() {
                                 <span className="font-data text-lg font-bold" style={{ color: cs.ratingColor }}>
                                   {cs.score.toFixed(1)}
                                 </span>
-                                <Badge
-                                  variant="outline"
-                                  className={`ml-2 text-xs ${ratingBgColors[cs.rating]}`}
-                                >
+                                <Badge variant="outline" className={`ml-2 text-xs ${ratingBgColors[cs.rating]}`}>
                                   {cs.ratingLabel}
                                 </Badge>
                               </div>
                               {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
                             </div>
                           </div>
-                          {/* Score Bar */}
                           <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
-                            <div
-                              className="h-full rounded-full transition-all duration-700"
-                              style={{ width: `${cs.score}%`, backgroundColor: cs.ratingColor }}
-                            />
+                            <div className="h-full rounded-full transition-all duration-700" style={{ width: `${cs.score}%`, backgroundColor: cs.ratingColor }} />
                           </div>
                         </CardHeader>
                       </button>
@@ -290,16 +270,11 @@ export default function ResultsStep() {
                           {result.recommendations.map((rec, i) => (
                             <tr key={i} className="border-b border-border last:border-0">
                               <td className="p-3">
-                                <Badge
-                                  variant="outline"
-                                  className={`text-xs ${
-                                    rec.priority === "critical"
-                                      ? ratingBgColors.critical
-                                      : rec.priority === "high"
-                                        ? ratingBgColors.high
-                                        : ratingBgColors.moderate
-                                  }`}
-                                >
+                                <Badge variant="outline" className={`text-xs ${
+                                  rec.priority === "critical" ? ratingBgColors.critical
+                                  : rec.priority === "high" ? ratingBgColors.high
+                                  : ratingBgColors.moderate
+                                }`}>
                                   {rec.priority.toUpperCase()}
                                 </Badge>
                               </td>

@@ -5,12 +5,8 @@
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import type { AssessmentResult, Recommendation } from "./scoring";
-import type { EmployeeInfo } from "@/contexts/AssessmentContext";
-import type { ComplianceTemplate } from "./compliance";
-import type { QuestionResponse } from "./scoring";
-import { CATEGORIES } from "./questionnaire";
-import { getActionTimeline } from "./scoring";
+import type { AssessmentResult, Recommendation, EmployeeInfo, QuestionResponse, ComplianceTemplate } from "@/lib/shared/types";
+import { getActionTimeline } from "@/lib/shared/scoring";
 
 // Colors
 const NAVY = [27, 42, 74] as const;

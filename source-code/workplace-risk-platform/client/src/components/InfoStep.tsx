@@ -61,7 +61,7 @@ export default function InfoStep() {
               <Shield className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
-              Ergonomic Assessment
+              Workplace Risk Platform
             </span>
           </div>
           <Button variant="ghost" size="sm" onClick={() => setStep("welcome")} className="gap-2 text-muted-foreground">

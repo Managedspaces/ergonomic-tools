@@ -1,28 +1,58 @@
 /**
- * Welcome Step — Landing page for the assessment
+ * Welcome Step — Tool-agnostic landing page for any assessment module
  * Design: Clinical Precision — Swiss Medical Design
  */
 
 import { useAssessment } from "@/contexts/AssessmentContext";
-import { CATEGORIES, SCORABLE_QUESTIONS } from "@/lib/questionnaire";
 import { Button } from "@/components/ui/button";
-import { Monitor, User, Clock, Sun, Eye, Brain, ArrowRight, Shield, FileText, Globe } from "lucide-react";
+import {
+  Monitor, Home, Clock, Flame, Zap, AlertTriangle, Brain, Eye, User, Sun,
+  ArrowRight, Shield, FileText, Globe, ArrowLeft,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663036985142/fhRLT49Ux3ps8Kx65JURu8/hero-ergonomic-FW5qFi5deWFjUorau3cAPV.webp";
-const POSTURE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663036985142/fhRLT49Ux3ps8Kx65JURu8/posture-illustration-4U4rvym6QGrWrK7Bdc9SYd.webp";
-
 const iconMap: Record<string, React.ReactNode> = {
-  Monitor: <Monitor className="w-5 h-5" />,
-  User: <User className="w-5 h-5" />,
-  Clock: <Clock className="w-5 h-5" />,
-  Sun: <Sun className="w-5 h-5" />,
-  Eye: <Eye className="w-5 h-5" />,
-  Brain: <Brain className="w-5 h-5" />,
+  Monitor:       <Monitor className="w-5 h-5" />,
+  Home:          <Home className="w-5 h-5" />,
+  Clock:         <Clock className="w-5 h-5" />,
+  Flame:         <Flame className="w-5 h-5" />,
+  Zap:           <Zap className="w-5 h-5" />,
+  AlertTriangle: <AlertTriangle className="w-5 h-5" />,
+  Brain:         <Brain className="w-5 h-5" />,
+  Eye:           <Eye className="w-5 h-5" />,
+  User:          <User className="w-5 h-5" />,
+  Sun:           <Sun className="w-5 h-5" />,
+  Shield:        <Shield className="w-5 h-5" />,
+};
+
+const toolHeroImages: Record<string, string> = {
+  "ergonomic":   "https://d2xsxph8kpxj0f.cloudfront.net/310519663036985142/fhRLT49Ux3ps8Kx65JURu8/hero-ergonomic-FW5qFi5deWFjUorau3cAPV.webp",
+  "home-office": "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80",
+};
+
+const toolSubImages: Record<string, string> = {
+  "ergonomic":   "https://d2xsxph8kpxj0f.cloudfront.net/310519663036985142/fhRLT49Ux3ps8Kx65JURu8/posture-illustration-4U4rvym6QGrWrK7Bdc9SYd.webp",
+  "home-office": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+};
+
+const toolDimensions: Record<string, string> = {
+  "ergonomic":   "Six dimensions of ergonomic health",
+  "home-office": "Six dimensions of home office safety",
 };
 
 export default function WelcomeStep() {
-  const { setStep } = useAssessment();
+  const { tool, setStep } = useAssessment();
+
+  if (!tool) return null;
+
+  const scorableCount = tool.categories.reduce(
+    (sum, cat) => sum + cat.questions.filter((q) => q.type !== "text_comment").length,
+    0
+  );
+
+  const heroImg = toolHeroImages[tool.id] ?? toolHeroImages["ergonomic"];
+  const subImg = toolSubImages[tool.id] ?? toolSubImages["ergonomic"];
+  const dimensionLabel = toolDimensions[tool.id] ?? "Assessment categories";
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,8 +60,8 @@ export default function WelcomeStep() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src={HERO_IMG}
-            alt="Ergonomic workstation"
+            src={heroImg}
+            alt={tool.name}
             className="w-full h-full object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
@@ -44,9 +74,16 @@ export default function WelcomeStep() {
                 <Shield className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
-                Ergonomic Assessment
+                Workplace Risk Platform
               </span>
             </div>
+            <button
+              onClick={() => setStep("welcome")}
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              All tools
+            </button>
           </nav>
 
           <div className="max-w-3xl">
@@ -64,8 +101,11 @@ export default function WelcomeStep() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="font-heading text-5xl lg:text-7xl text-foreground leading-[1.1] mb-6"
             >
-              Ergonomic Risk<br />
-              <span className="italic">Self-Assessment</span>
+              {tool.id === "home-office" ? (
+                <>Home Office<br /><span className="italic">Risk Assessment</span></>
+              ) : (
+                <>Ergonomic Risk<br /><span className="italic">Self-Assessment</span></>
+              )}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -73,8 +113,8 @@ export default function WelcomeStep() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg text-muted-foreground max-w-xl mb-8 leading-relaxed"
             >
-              Evaluate your workspace ergonomic risks with our comprehensive assessment tool.
-              Receive personalized recommendations and compliance-ready reports for your jurisdiction.
+              {tool.description} Receive personalised recommendations and compliance-ready
+              reports for your jurisdiction.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -93,11 +133,11 @@ export default function WelcomeStep() {
               <div className="flex items-center gap-6 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                   <FileText className="w-4 h-4" />
-                  {SCORABLE_QUESTIONS} questions
+                  {scorableCount} questions
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
-                  ~10 minutes
+                  ~5 minutes
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Globe className="w-4 h-4" />
@@ -117,21 +157,22 @@ export default function WelcomeStep() {
               Assessment Categories
             </p>
             <h2 className="font-heading text-3xl lg:text-4xl text-foreground mb-6">
-              Six dimensions of<br /><span className="italic">ergonomic health</span>
+              {dimensionLabel.split(" ").slice(0, 3).join(" ")}<br />
+              <span className="italic">{dimensionLabel.split(" ").slice(3).join(" ")}</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-8 max-w-md">
-              Our assessment covers the critical factors that influence your physical
-              well-being at work, from equipment setup to psychosocial factors.
+              Our assessment covers the critical factors that influence your safety and
+              well-being, generating actionable recommendations and a compliance-ready report.
             </p>
             <img
-              src={POSTURE_IMG}
-              alt="Correct ergonomic posture diagram"
+              src={subImg}
+              alt={`${tool.name} illustration`}
               className="w-full max-w-sm rounded-lg border border-border/50 shadow-sm"
             />
           </div>
 
           <div className="space-y-3">
-            {CATEGORIES.map((cat, i) => (
+            {tool.categories.map((cat, i) => (
               <motion.div
                 key={cat.id}
                 initial={{ opacity: 0, x: 20 }}
@@ -140,7 +181,7 @@ export default function WelcomeStep() {
                 className="flex items-start gap-4 p-4 rounded-lg border border-border/50 bg-card hover:border-border hover:shadow-sm transition-all"
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0 text-foreground">
-                  {iconMap[cat.icon]}
+                  {iconMap[cat.icon] ?? <Shield className="w-5 h-5" />}
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground text-sm mb-1">{cat.title}</h3>
@@ -186,7 +227,7 @@ export default function WelcomeStep() {
 
       {/* Footer */}
       <footer className="container py-8 text-center text-xs text-muted-foreground">
-        <p>Ergonomic Risk Self-Assessment Tool · For informational purposes only · Does not constitute medical advice</p>
+        <p>Workplace Risk Platform · {tool.name} · For informational purposes only · Does not constitute legal or medical advice</p>
       </footer>
     </div>
   );

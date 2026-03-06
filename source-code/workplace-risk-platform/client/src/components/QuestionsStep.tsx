@@ -1,57 +1,62 @@
 /**
- * Questions Step — Step-by-step assessment with category sidebar
+ * Questions Step — Tool-agnostic step-by-step assessment with category sidebar
  * Design: Clinical Precision — Swiss Medical Design
  */
 
 import { useAssessment } from "@/contexts/AssessmentContext";
-import { CATEGORIES } from "@/lib/questionnaire";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  ArrowLeft, ArrowRight, Shield, Check, Monitor, User, Clock, Sun, Eye, Brain,
+  ArrowLeft, ArrowRight, Shield, Check,
+  Monitor, Home, Clock, Flame, Zap, AlertTriangle, Brain, Eye, User, Sun,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 const iconMap: Record<string, React.ReactNode> = {
-  Monitor: <Monitor className="w-4 h-4" />,
-  User: <User className="w-4 h-4" />,
-  Clock: <Clock className="w-4 h-4" />,
-  Sun: <Sun className="w-4 h-4" />,
-  Eye: <Eye className="w-4 h-4" />,
-  Brain: <Brain className="w-4 h-4" />,
+  Monitor:       <Monitor className="w-4 h-4" />,
+  Home:          <Home className="w-4 h-4" />,
+  Clock:         <Clock className="w-4 h-4" />,
+  Flame:         <Flame className="w-4 h-4" />,
+  Zap:           <Zap className="w-4 h-4" />,
+  AlertTriangle: <AlertTriangle className="w-4 h-4" />,
+  Brain:         <Brain className="w-4 h-4" />,
+  Eye:           <Eye className="w-4 h-4" />,
+  User:          <User className="w-4 h-4" />,
+  Sun:           <Sun className="w-4 h-4" />,
+  Shield:        <Shield className="w-4 h-4" />,
 };
 
 export default function QuestionsStep() {
   const {
-    setStep, currentCategoryIndex, currentQuestionIndex,
+    tool, setStep, currentCategoryIndex, currentQuestionIndex,
     nextQuestion, prevQuestion, goToCategory, setResponse, getResponse,
     responses, submitAssessment, totalProgress,
   } = useAssessment();
 
-  const category = CATEGORIES[currentCategoryIndex];
+  if (!tool) return null;
+
+  const categories = tool.categories;
+  const category = categories[currentCategoryIndex];
   const question = category.questions[currentQuestionIndex];
   const currentResponse = getResponse(question.id);
 
   const isFirstQuestion = currentCategoryIndex === 0 && currentQuestionIndex === 0;
-  const isLastCategory = currentCategoryIndex === CATEGORIES.length - 1;
+  const isLastCategory = currentCategoryIndex === categories.length - 1;
   const isLastQuestion = currentQuestionIndex === category.questions.length - 1;
   const isVeryLast = isLastCategory && isLastQuestion;
 
-  // Count answered questions per category
   const getCategoryAnswered = (catIndex: number) => {
-    const cat = CATEGORIES[catIndex];
+    const cat = categories[catIndex];
     return cat.questions.filter(
       (q) => q.type !== "text_comment" && responses.some((r) => r.questionId === q.id)
     ).length;
   };
 
-  const getCategoryScorable = (catIndex: number) => {
-    return CATEGORIES[catIndex].questions.filter((q) => q.type !== "text_comment").length;
-  };
+  const getCategoryScorable = (catIndex: number) =>
+    categories[catIndex].questions.filter((q) => q.type !== "text_comment").length;
 
   const handleNext = () => {
     if (question.required && question.type !== "text_comment" && !currentResponse) {
@@ -59,8 +64,7 @@ export default function QuestionsStep() {
       return;
     }
     if (isVeryLast) {
-      // Check all required questions are answered
-      const unanswered = CATEGORIES.flatMap((cat) =>
+      const unanswered = categories.flatMap((cat) =>
         cat.questions.filter(
           (q) => q.required && q.type !== "text_comment" && !responses.some((r) => r.questionId === q.id)
         )
@@ -83,13 +87,12 @@ export default function QuestionsStep() {
     }
   };
 
-  // Global question number
   let globalIndex = 0;
   for (let ci = 0; ci < currentCategoryIndex; ci++) {
-    globalIndex += CATEGORIES[ci].questions.length;
+    globalIndex += categories[ci].questions.length;
   }
   globalIndex += currentQuestionIndex + 1;
-  const totalQuestions = CATEGORIES.reduce((s, c) => s + c.questions.length, 0);
+  const totalQuestions = categories.reduce((s, c) => s + c.questions.length, 0);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -101,7 +104,7 @@ export default function QuestionsStep() {
               <Shield className="w-4 h-4 text-primary-foreground" />
             </div>
             <span className="text-xs font-semibold tracking-wide uppercase text-muted-foreground hidden sm:block">
-              Ergonomic Assessment
+              {tool.name}
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -125,7 +128,7 @@ export default function QuestionsStep() {
             Categories
           </p>
           <nav className="space-y-1">
-            {CATEGORIES.map((cat, i) => {
+            {categories.map((cat, i) => {
               const answered = getCategoryAnswered(i);
               const total = getCategoryScorable(i);
               const isActive = i === currentCategoryIndex;
@@ -144,7 +147,7 @@ export default function QuestionsStep() {
                   <div className={`w-7 h-7 rounded flex items-center justify-center shrink-0 ${
                     isActive ? "bg-primary text-primary-foreground" : isComplete ? "bg-chart-1/20 text-chart-1" : "bg-secondary text-muted-foreground"
                   }`}>
-                    {isComplete ? <Check className="w-3.5 h-3.5" /> : iconMap[cat.icon]}
+                    {isComplete ? <Check className="w-3.5 h-3.5" /> : (iconMap[cat.icon] ?? <Shield className="w-4 h-4" />)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="block truncate text-xs">{cat.title}</span>
@@ -161,7 +164,7 @@ export default function QuestionsStep() {
         {/* Mobile Category Bar */}
         <div className="lg:hidden border-b border-border bg-card overflow-x-auto fixed top-[53px] left-0 right-0 z-10">
           <div className="flex gap-1 p-2 min-w-max">
-            {CATEGORIES.map((cat, i) => {
+            {categories.map((cat, i) => {
               const isActive = i === currentCategoryIndex;
               const answered = getCategoryAnswered(i);
               const total = getCategoryScorable(i);
@@ -194,7 +197,7 @@ export default function QuestionsStep() {
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary">
-                    {iconMap[category.icon]}
+                    {iconMap[category.icon] ?? <Shield className="w-4 h-4" />}
                   </div>
                   <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
                     {category.title}
@@ -303,10 +306,7 @@ export default function QuestionsStep() {
                 {isFirstQuestion ? "Back to Info" : "Previous"}
               </Button>
 
-              <Button
-                onClick={handleNext}
-                className="gap-2 px-6"
-              >
+              <Button onClick={handleNext} className="gap-2 px-6">
                 {isVeryLast ? "Submit Assessment" : "Next"}
                 <ArrowRight className="w-4 h-4" />
               </Button>

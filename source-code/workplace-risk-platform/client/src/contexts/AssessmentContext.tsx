@@ -1,24 +1,22 @@
 /**
- * Assessment State Management Context
- * Manages the full assessment flow: employee info → questions → results
+ * Platform Core — Generic Assessment Context
+ * Works with any ToolModule from the registry.
+ * Replaces the ergonomic-specific context with a tool-agnostic version.
  */
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import { CATEGORIES } from "@/lib/questionnaire";
-import { calculateAssessment, type QuestionResponse, type AssessmentResult } from "@/lib/scoring";
-
-export interface EmployeeInfo {
-  name: string;
-  email: string;
-  jobTitle: string;
-  department: string;
-  workLocation: "office" | "home" | "hybrid" | "other";
-  country: string;
-}
+import { calculateAssessment } from "@/lib/shared/scoring";
+import type {
+  ToolModule,
+  QuestionResponse,
+  AssessmentResult,
+  EmployeeInfo,
+} from "@/lib/shared/types";
 
 export type AssessmentStep = "welcome" | "info" | "questions" | "results";
 
 interface AssessmentState {
+  tool: ToolModule | null;
   step: AssessmentStep;
   employeeInfo: EmployeeInfo;
   responses: QuestionResponse[];
@@ -29,6 +27,7 @@ interface AssessmentState {
 }
 
 interface AssessmentContextType extends AssessmentState {
+  setTool: (tool: ToolModule) => void;
   setStep: (step: AssessmentStep) => void;
   setEmployeeInfo: (info: EmployeeInfo) => void;
   setResponse: (questionId: string, value: string, textComment?: string) => void;
@@ -48,14 +47,15 @@ const defaultEmployeeInfo: EmployeeInfo = {
   email: "",
   jobTitle: "",
   department: "",
-  workLocation: "office",
-  country: "UK",
+  workLocation: "home",
+  country: "IE",
 };
 
 const AssessmentContext = createContext<AssessmentContextType | null>(null);
 
 export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AssessmentState>({
+    tool: null,
     step: "welcome",
     employeeInfo: defaultEmployeeInfo,
     responses: [],
@@ -64,6 +64,18 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     result: null,
     photoDataUrl: null,
   });
+
+  const setTool = useCallback((tool: ToolModule) => {
+    setState((s) => ({
+      ...s,
+      tool,
+      step: "welcome",
+      responses: [],
+      currentCategoryIndex: 0,
+      currentQuestionIndex: 0,
+      result: null,
+    }));
+  }, []);
 
   const setStep = useCallback((step: AssessmentStep) => {
     setState((s) => ({ ...s, step }));
@@ -88,18 +100,18 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const getResponse = useCallback(
-    (questionId: string) => {
-      return state.responses.find((r) => r.questionId === questionId);
-    },
+    (questionId: string) => state.responses.find((r) => r.questionId === questionId),
     [state.responses]
   );
 
   const nextQuestion = useCallback(() => {
     setState((s) => {
-      const category = CATEGORIES[s.currentCategoryIndex];
+      if (!s.tool) return s;
+      const categories = s.tool.categories;
+      const category = categories[s.currentCategoryIndex];
       if (s.currentQuestionIndex < category.questions.length - 1) {
         return { ...s, currentQuestionIndex: s.currentQuestionIndex + 1 };
-      } else if (s.currentCategoryIndex < CATEGORIES.length - 1) {
+      } else if (s.currentCategoryIndex < categories.length - 1) {
         return { ...s, currentCategoryIndex: s.currentCategoryIndex + 1, currentQuestionIndex: 0 };
       }
       return s;
@@ -108,10 +120,12 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
 
   const prevQuestion = useCallback(() => {
     setState((s) => {
+      if (!s.tool) return s;
+      const categories = s.tool.categories;
       if (s.currentQuestionIndex > 0) {
         return { ...s, currentQuestionIndex: s.currentQuestionIndex - 1 };
       } else if (s.currentCategoryIndex > 0) {
-        const prevCat = CATEGORIES[s.currentCategoryIndex - 1];
+        const prevCat = categories[s.currentCategoryIndex - 1];
         return {
           ...s,
           currentCategoryIndex: s.currentCategoryIndex - 1,
@@ -127,13 +141,19 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const submitAssessment = useCallback(() => {
-    const result = calculateAssessment(state.responses);
+    if (!state.tool) throw new Error("No tool selected");
+    const result = calculateAssessment(
+      state.tool.categories,
+      state.responses,
+      state.tool.getRecommendations
+    );
     setState((s) => ({ ...s, result, step: "results" }));
     return result;
-  }, [state.responses]);
+  }, [state.tool, state.responses]);
 
   const resetAssessment = useCallback(() => {
-    setState({
+    setState((s) => ({
+      tool: s.tool, // Keep the tool selected
       step: "welcome",
       employeeInfo: defaultEmployeeInfo,
       responses: [],
@@ -141,33 +161,36 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
       currentQuestionIndex: 0,
       result: null,
       photoDataUrl: null,
-    });
+    }));
   }, []);
 
   const setPhotoDataUrl = useCallback((url: string | null) => {
     setState((s) => ({ ...s, photoDataUrl: url }));
   }, []);
 
-  // Calculate progress
+  // ─── Progress Calculation ───────────────────────────────────────────────
+  const categories = state.tool?.categories ?? [];
+
+  const totalScorable = categories.reduce(
+    (sum, cat) => sum + cat.questions.filter((q) => q.type !== "text_comment").length,
+    0
+  );
   const totalAnswered = state.responses.filter((r) => {
-    for (const cat of CATEGORIES) {
+    for (const cat of categories) {
       const q = cat.questions.find((q) => q.id === r.questionId);
       if (q && q.type !== "text_comment") return true;
     }
     return false;
   }).length;
 
-  const totalScorable = CATEGORIES.reduce(
-    (sum, cat) => sum + cat.questions.filter((q) => q.type !== "text_comment").length,
-    0
-  );
-
-  const currentCat = CATEGORIES[state.currentCategoryIndex];
-  const catAnswered = currentCat
-    ? state.responses.filter((r) => currentCat.questions.some((q) => q.id === r.questionId && q.type !== "text_comment")).length
-    : 0;
+  const currentCat = categories[state.currentCategoryIndex];
   const catScorable = currentCat
     ? currentCat.questions.filter((q) => q.type !== "text_comment").length
+    : 0;
+  const catAnswered = currentCat
+    ? state.responses.filter((r) =>
+        currentCat.questions.some((q) => q.id === r.questionId && q.type !== "text_comment")
+      ).length
     : 0;
 
   const totalProgress = totalScorable > 0 ? (totalAnswered / totalScorable) * 100 : 0;
@@ -177,6 +200,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     <AssessmentContext.Provider
       value={{
         ...state,
+        setTool,
         setStep,
         setEmployeeInfo,
         setResponse,
