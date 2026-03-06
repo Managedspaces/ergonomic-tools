@@ -209,9 +209,9 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
                   {/* Card body */}
                   <div className="px-6 py-4 flex items-center justify-between">
                     <div className="flex flex-wrap gap-3">
-                      {tool.categories?.slice(0, 3).map((cat: string) => (
-                        <span key={cat} className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--sabine-muted)", color: "var(--sabine-muted-text)" }}>
-                          {cat}
+                      {tool.categories?.slice(0, 3).map((cat) => (
+                        <span key={cat.id} className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "var(--sabine-muted)", color: "var(--sabine-muted-text)" }}>
+                          {cat.title}
                         </span>
                       ))}
                       {(tool.categories?.length ?? 0) > 3 && (
