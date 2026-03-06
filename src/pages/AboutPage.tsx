@@ -1,92 +1,32 @@
 /**
- * About Page — Platform story, methodology, team, and compliance credentials
+ * About Page — Sabine Salowsky, personal voice and real credentials
  * Sabine brand design system
  */
 
 import { motion } from "framer-motion";
-import {
-  Shield, BookOpen, Globe, Users, Award, CheckCircle2,
-  ArrowRight, Lightbulb, TrendingUp, Lock
-} from "lucide-react";
+import { CheckCircle2, ArrowRight, Quote } from "lucide-react";
 
 interface AboutPageProps {
   onNavigate: (page: string) => void;
 }
 
-const values = [
-  {
-    icon: <Shield className="w-5 h-5" />,
-    title: "Compliance First",
-    desc: "Every question, scoring rule, and recommendation is grounded in current legislation and international standards — not generic advice.",
-  },
-  {
-    icon: <Lock className="w-5 h-5" />,
-    title: "Privacy by Design",
-    desc: "Employee assessment data is processed client-side. No personal data is transmitted to external servers without explicit consent.",
-  },
-  {
-    icon: <Globe className="w-5 h-5" />,
-    title: "Internationally Applicable",
-    desc: "Built for organisations operating across multiple jurisdictions. Compliance text adapts automatically to the selected country.",
-  },
-  {
-    icon: <Lightbulb className="w-5 h-5" />,
-    title: "Actionable Outputs",
-    desc: "Assessments don't just identify risk — they generate prioritised, practical recommendations that employees and managers can act on immediately.",
-  },
-  {
-    icon: <TrendingUp className="w-5 h-5" />,
-    title: "Built to Scale",
-    desc: "The modular architecture means new tools, categories, and jurisdictions can be added without touching existing functionality.",
-  },
-  {
-    icon: <Users className="w-5 h-5" />,
-    title: "Designed for Everyone",
-    desc: "Plain-language questions, mobile-friendly layout, and a clean interface make the tools accessible to all employees — not just H&S professionals.",
-  },
+const credentials = [
+  "B.Sc. Occupational Therapy (Ergotherapie)",
+  "Diplom-Biologin — Physiological Psychology",
+  "Corporate Occupational Health — D. Swarovski KG, Austria",
+  "Research — Max-Planck-Institut für Biologische Kybernetik, Tübingen",
+  "Cognitive Neuroscience — University of Tübingen",
+  "Bilingual: native-level German and English",
+  "Cross-jurisdictional compliance: UK, Ireland, DACH, Australia",
 ];
 
-const methodology = [
-  {
-    step: "01",
-    title: "Structured Question Design",
-    desc: "Each question set is authored by occupational health and safety experts. Questions are mapped to specific risk indicators and scored using validated weighting models aligned with ISO 45001 and EU-OSHA frameworks.",
-  },
-  {
-    step: "02",
-    title: "Weighted Scoring Engine",
-    desc: "Answers are converted to risk scores (0–5 per question) and multiplied by category weights. Category scores are normalised to a 0–100 scale and combined into an overall risk rating: Low, Moderate, High, or Critical.",
-  },
-  {
-    step: "03",
-    title: "Jurisdiction-Aware Compliance",
-    desc: "Each tool contains compliance templates for Ireland, UK, Germany, Switzerland, Denmark, and Australia. The correct legislation, employer obligations, and employee rights are automatically included in every report.",
-  },
-  {
-    step: "04",
-    title: "Prioritised Recommendations",
-    desc: "Recommendations are generated per category based on the risk rating. They are sorted critical-first and include specific, actionable steps — not generic guidance.",
-  },
-];
-
-const standards = [
-  { code: "ISO 45001:2018", name: "Occupational Health & Safety Management Systems" },
-  { code: "ISO 45003:2021", name: "Psychological Health & Safety at Work" },
-  { code: "ISO 9241", name: "Ergonomics of Human-System Interaction" },
-  { code: "EU Directive 89/391/EEC", name: "Framework Directive on Safety & Health at Work" },
-  { code: "EU Directive 90/270/EEC", name: "Display Screen Equipment" },
-  { code: "HSE Management Standards", name: "Work-Related Stress (UK)" },
-  { code: "ISO 31000:2018", name: "Risk Management — Guidelines" },
-  { code: "EU-OSHA Framework", name: "Psychosocial Risks & Stress at Work" },
-];
-
-const timeline = [
-  { year: "2024", event: "Platform concept developed — modular compliance tool architecture designed" },
-  { year: "2025 Q1", event: "Ergonomic Risk Assessment (Tool #1) — 32 questions, 6 categories, 6 jurisdictions" },
-  { year: "2025 Q2", event: "Home Office Risk Assessment (Tool #2) — OHS expert question set, remote work focus" },
-  { year: "2025 Q3", event: "Psychosocial Risk Assessment (Tool #3) — ISO 45003 aligned, confidential reporting" },
-  { year: "2025 Q4", event: "Risk Assessment Builder (Tool #4) — dynamic 5×5 matrix, audit-ready hazard register" },
-  { year: "2026", event: "Brand redesign, commercial deployment, AI trend analysis roadmap" },
+const jurisdictions = [
+  { flag: "🇮🇪", name: "Ireland", law: "Safety, Health & Welfare at Work Act 2005" },
+  { flag: "🇬🇧", name: "United Kingdom", law: "HSE Management Standards; Working Time Regulations 1998" },
+  { flag: "🇩🇪", name: "Germany", law: "ArbSchG §5 — Gefährdungsbeurteilung" },
+  { flag: "🇨🇭", name: "Switzerland", law: "ArGV 3 Art. 2; OR Art. 328 Fürsorgepflicht" },
+  { flag: "🇩🇰", name: "Denmark", law: "Arbejdsmiljøloven; BEK nr. 1406" },
+  { flag: "🇦🇺", name: "Australia", law: "Model WHS Act 2011; Safe Work Australia Code 2022" },
 ];
 
 export default function AboutPage({ onNavigate }: AboutPageProps) {
@@ -97,172 +37,177 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
       <section style={{ backgroundColor: "var(--sabine-navy)" }} className="pt-14 pb-16">
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <p className="section-label section-label-light mb-3">About the Platform</p>
+            <p className="section-label section-label-light mb-3">About the Consultancy</p>
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              Built by H&S experts.<br />
-              <span style={{ color: "var(--sabine-cta)" }}>Designed for everyone.</span>
+              About Sabine Salowsky
             </h1>
             <p className="text-lg max-w-2xl leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
-              The Workplace Risk Platform is a modular compliance toolkit built to make professional-grade
-              risk assessments accessible to every organisation — from SMEs to enterprise teams operating
-              across multiple jurisdictions.
+              Workplace risk and ergonomics specialist. Bilingual. Remote-first. Built for SMEs that need
+              the rigour of enterprise occupational health without the complexity or cost.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Mission ── */}
-      <section className="py-14">
+      {/* ── Bio Section ── */}
+      <section className="py-16">
         <div className="container">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-14 items-start">
+
+            {/* Photo + credentials card */}
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-              <p className="section-label mb-3">Our Mission</p>
-              <h2 className="text-3xl font-bold mb-5" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-                Compliance shouldn't require a consultant for every assessment.
-              </h2>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
-                Most SMEs know they need risk assessments but lack the internal expertise to conduct them properly, 
-                or the budget to engage external consultants for routine compliance tasks. The result is either 
-                no assessment at all, or a generic tick-box exercise that provides no real protection.
-              </p>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
-                The Workplace Risk Platform changes that. Each tool is built on the same methodology used by 
-                professional H&S consultants — structured question sets, weighted scoring, jurisdiction-specific 
-                compliance text, and audit-ready PDF reports — delivered through an interface that any employee 
-                can complete in under 15 minutes.
-              </p>
+              <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--sabine-border)", backgroundColor: "var(--sabine-card)", boxShadow: "0 4px 20px rgba(0,0,0,0.07)" }}>
+                <img
+                  src="/ergonomic-tools/sabine-headshot.jpeg"
+                  alt="Sabine Salowsky — Workplace Wellbeing Consultant"
+                  className="w-full object-cover"
+                  style={{ maxHeight: "380px", objectPosition: "center top" }}
+                />
+                <div className="px-6 py-5">
+                  <p className="font-bold text-base" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
+                    Sabine Salowsky
+                  </p>
+                  <p className="text-xs mt-0.5 mb-4" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
+                    B.Sc. Ergotherapie · Dipl.-Biol.
+                  </p>
+                  <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Roboto', sans-serif" }}>
+                    Credentials &amp; Expertise
+                  </p>
+                  <ul className="space-y-2">
+                    {credentials.map((c) => (
+                      <li key={c} className="flex items-start gap-2 text-xs" style={{ color: "var(--sabine-text)", fontFamily: "'Open Sans', sans-serif" }}>
+                        <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: "var(--sabine-teal)" }} />
+                        {c}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Story */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }} className="space-y-5">
+              <div>
+                <p className="section-label mb-3">The Approach</p>
+                <h2 className="text-3xl font-bold mb-5" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
+                  Proportionate expertise.<br />Defensible outputs.<br />No generic checklists.
+                </h2>
+              </div>
+
               <p className="text-sm leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
-                The platform is designed to grow with your organisation. New tools, categories, and jurisdictions 
-                can be added without changing the core architecture — making it a long-term compliance infrastructure 
-                investment, not a one-off project.
+                Effective ergonomics consultancy requires more than just a checklist. It requires a deep,
+                scientific understanding of human physiology, cognition, and functional capacity.
               </p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { n: "4", l: "Assessment Tools" },
-                  { n: "6", l: "Jurisdictions" },
-                  { n: "100+", l: "Scored Questions" },
-                  { n: "3", l: "Report Formats" },
-                  { n: "8+", l: "International Standards" },
-                  { n: "0", l: "Data Sent to Servers" },
-                ].map((s) => (
-                  <div key={s.l} className="rounded-xl border p-5 text-center" style={{ backgroundColor: "var(--sabine-card)", borderColor: "var(--sabine-border)" }}>
-                    <p className="text-3xl font-black mb-1" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-navy)" }}>{s.n}</p>
-                    <p className="text-xs" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>{s.l}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* ── Methodology ── */}
-      <section className="py-14" style={{ backgroundColor: "var(--sabine-card)", borderTop: "1px solid var(--sabine-border)", borderBottom: "1px solid var(--sabine-border)" }}>
-        <div className="container">
-          <div className="text-center mb-10">
-            <p className="section-label mb-2">Methodology</p>
-            <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-              How the scoring works
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {methodology.map((m) => (
-              <div key={m.step} className="rounded-xl border p-6" style={{ backgroundColor: "var(--sabine-bg)", borderColor: "var(--sabine-border)" }}>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl font-black" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-cta)" }}>{m.step}</span>
-                  <h3 className="font-bold text-sm" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>{m.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
+                My background is rooted in this scientific rigour. I hold a <strong style={{ color: "var(--sabine-text)" }}>B.Sc. in Occupational Therapy</strong> and
+                a <strong style={{ color: "var(--sabine-text)" }}>Diplom-Biologin</strong> with a specialism in Physiological Psychology. This dual qualification
+                provides the foundation for my approach: assessing the physical and cognitive demands of the
+                workplace through a clinical lens.
+              </p>
+
+              <p className="text-sm leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
+                Before establishing this consultancy, my career spanned corporate occupational health —
+                including direct experience within the Occupational Health division of{" "}
+                <strong style={{ color: "var(--sabine-text)" }}>D. Swarovski KG</strong> in Austria — as well as research roles at the{" "}
+                <strong style={{ color: "var(--sabine-text)" }}>Max-Planck-Institut für Biologische Kybernetik</strong> and the Chair of Cognitive Neuroscience
+                at the University of Tübingen. I have also worked extensively across clinical settings in
+                Germany and Austria.
+              </p>
+
+              <p className="text-sm leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
+                Today, I apply this clinical and scientific expertise to help SMEs manage their workplace risk.
+                My bilingual capability (native German, fluent English) and multi-jurisdictional experience mean
+                that organisations with employees across the UK, Ireland, and the DACH region can work with a
+                single specialist who understands both the physical realities of the work and the regulatory
+                frameworks that govern it.
+              </p>
+
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                <div className="rounded-xl border p-4 text-center" style={{ backgroundColor: "var(--sabine-bg)", borderColor: "var(--sabine-border)" }}>
+                  <p className="text-3xl font-black" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-navy)" }}>4</p>
+                  <p className="text-xs mt-1" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>Regulatory frameworks covered:<br />UK, Ireland, DACH, Australia</p>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>{m.desc}</p>
+                <div className="rounded-xl border p-4 text-center" style={{ backgroundColor: "var(--sabine-bg)", borderColor: "var(--sabine-border)" }}>
+                  <p className="text-3xl font-black" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-navy)" }}>2</p>
+                  <p className="text-xs mt-1" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>Languages: English and German,<br />both at native level</p>
+                </div>
               </div>
-            ))}
+
+              <button
+                onClick={() => onNavigate("contact")}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-all mt-2"
+                style={{ backgroundColor: "var(--sabine-cta)", fontFamily: "'Roboto', sans-serif" }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta-hover)")}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta)")}
+              >
+                Book a Consultation <ArrowRight className="w-4 h-4" />
+              </button>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── Values ── */}
+      {/* ── Philosophy Quote ── */}
+      <section className="py-16" style={{ backgroundColor: "var(--sabine-navy)" }}>
+        <div className="container max-w-3xl text-center">
+          <p className="section-label section-label-light mb-6">The Philosophy</p>
+          <div className="flex justify-center mb-6">
+            <Quote className="w-10 h-10 opacity-40 text-white" />
+          </div>
+          <blockquote
+            className="text-2xl lg:text-3xl font-bold text-white leading-snug mb-8"
+            style={{ fontFamily: "'Roboto', sans-serif" }}
+          >
+            "Ergonomics is not a wellness initiative. It is a legal obligation, a liability management
+            tool, and, when done properly, a genuine driver of productivity and retention."
+          </blockquote>
+          <p className="text-sm leading-relaxed max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.65)", fontFamily: "'Open Sans', sans-serif" }}>
+            Every piece of work produced by this consultancy is designed with one question in mind: would
+            this documentation protect the client in the event of a regulatory inspection, an insurance
+            claim, or a legal proceeding? If the answer is no, it is not finished.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Jurisdiction Coverage ── */}
       <section className="py-14">
         <div className="container">
           <div className="text-center mb-10">
-            <p className="section-label mb-2">Platform Principles</p>
+            <p className="section-label mb-2">Jurisdiction Coverage</p>
             <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-              What guides every decision
+              Multi-jurisdictional compliance expertise
             </h2>
+            <p className="text-sm mt-3 max-w-xl mx-auto" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
+              Each assessment tool automatically includes the correct legislation, employer obligations,
+              and employee rights for the selected country.
+            </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {values.map((v) => (
-              <div key={v.title} className="rounded-xl border p-5" style={{ backgroundColor: "var(--sabine-card)", borderColor: "var(--sabine-border)" }}>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3" style={{ backgroundColor: "rgba(26,43,95,0.08)", color: "var(--sabine-navy)" }}>
-                  {v.icon}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {jurisdictions.map((j) => (
+              <div key={j.name} className="rounded-xl border p-5" style={{ borderColor: "var(--sabine-border)", backgroundColor: "var(--sabine-card)" }}>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl">{j.flag}</span>
+                  <p className="font-semibold text-sm" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>{j.name}</p>
                 </div>
-                <p className="font-semibold text-sm mb-1.5" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>{v.title}</p>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>{v.desc}</p>
+                <p className="text-xs leading-relaxed" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>{j.law}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Standards ── */}
-      <section className="py-14" style={{ backgroundColor: "var(--sabine-card)", borderTop: "1px solid var(--sabine-border)", borderBottom: "1px solid var(--sabine-border)" }}>
-        <div className="container">
-          <div className="text-center mb-10">
-            <p className="section-label mb-2">Standards & Legislation</p>
-            <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-              Built on internationally recognised frameworks
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-3 max-w-3xl mx-auto">
-            {standards.map((s) => (
-              <div key={s.code} className="flex items-start gap-3 rounded-xl border p-4" style={{ backgroundColor: "var(--sabine-bg)", borderColor: "var(--sabine-border)" }}>
-                <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "var(--sabine-teal)" }} />
-                <div>
-                  <p className="text-xs font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>{s.code}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>{s.name}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Timeline ── */}
-      <section className="py-14">
-        <div className="container max-w-2xl">
-          <div className="text-center mb-10">
-            <p className="section-label mb-2">Platform Roadmap</p>
-            <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-              How we got here
-            </h2>
-          </div>
-          <div className="relative">
-            <div className="absolute left-6 top-0 bottom-0 w-px" style={{ backgroundColor: "var(--sabine-border)" }} />
-            <div className="space-y-6">
-              {timeline.map((t, i) => (
-                <motion.div key={t.year} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: i * 0.08 }} className="flex gap-5">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 z-10" style={{ backgroundColor: i === timeline.length - 1 ? "var(--sabine-cta)" : "var(--sabine-card)", border: `2px solid ${i === timeline.length - 1 ? "var(--sabine-cta)" : "var(--sabine-border)"}` }}>
-                    <Award className="w-4 h-4" style={{ color: i === timeline.length - 1 ? "#fff" : "var(--sabine-muted-text)" }} />
-                  </div>
-                  <div className="pt-2.5">
-                    <p className="text-xs font-bold mb-1" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-cta)" }}>{t.year}</p>
-                    <p className="text-sm" style={{ color: "var(--sabine-text)", fontFamily: "'Open Sans', sans-serif" }}>{t.event}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-16" style={{ backgroundColor: "var(--sabine-navy)" }}>
+      <section className="py-16" style={{ backgroundColor: "var(--sabine-card)", borderTop: "1px solid var(--sabine-border)" }}>
         <div className="container text-center">
-          <h2 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-            Want to know more?
+          <p className="section-label mb-3">Work With Sabine</p>
+          <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
+            Let us discuss your compliance requirements.
           </h2>
-          <p className="text-base mb-8 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Open Sans', sans-serif" }}>
-            Get in touch to discuss custom tool development, enterprise deployment, or jurisdiction expansion.
+          <p className="text-sm mb-8 max-w-xl mx-auto" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
+            Whether you need a single assessment, an ongoing wellbeing partnership, or a custom compliance
+            tool for your organisation — get in touch to discuss your requirements.
           </p>
           <button
             onClick={() => onNavigate("contact")}
@@ -271,7 +216,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta-hover)")}
             onMouseLeave={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta)")}
           >
-            Contact Us <ArrowRight className="w-4 h-4" />
+            Book a Consultation <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </section>
