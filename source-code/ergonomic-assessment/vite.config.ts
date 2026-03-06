@@ -150,7 +150,11 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+const isProduction = process.env.NODE_ENV === "production";
+// Manus-specific plugins are only used in the Manus dev environment, not in production builds
+const plugins = isProduction
+  ? [react(), tailwindcss()]
+  : [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
   plugins,
