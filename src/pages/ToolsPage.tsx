@@ -103,7 +103,15 @@ export default function ToolsPage({ onSelectTool, onNavigate }: ToolsPageProps) 
     <div className="min-h-screen" style={{ backgroundColor: "var(--sabine-bg)" }}>
 
       {/* ── Page Hero ── */}
-      <section style={{ backgroundColor: "var(--sabine-navy)" }} className="pt-14 pb-16">
+      <section
+        className="pt-14 pb-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,95,0.72), rgba(26,43,95,0.82)), url('/ergonomic-tools/img-tools-desk.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 35%",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <p className="section-label section-label-light mb-3">Assessment Tools</p>
@@ -233,7 +241,15 @@ export default function ToolsPage({ onSelectTool, onNavigate }: ToolsPageProps) 
       </div>
 
       {/* ── CTA Banner ── */}
-      <section className="py-16" style={{ backgroundColor: "var(--sabine-navy)" }}>
+      <section
+        className="py-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,95,0.78), rgba(26,43,95,0.88)), url('/ergonomic-tools/img-hero-office.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="container text-center">
           <h2 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
             Need a custom assessment?

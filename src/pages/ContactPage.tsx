@@ -80,7 +80,15 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
     <div className="min-h-screen" style={{ backgroundColor: "var(--sabine-bg)" }}>
 
       {/* ── Hero ── */}
-      <section style={{ backgroundColor: "var(--sabine-navy)" }} className="pt-14 pb-16">
+      <section
+        className="pt-14 pb-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,95,0.72), rgba(26,43,95,0.82)), url('/ergonomic-tools/img-contact-space.webp')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <p className="section-label section-label-light mb-3">Get in Touch</p>

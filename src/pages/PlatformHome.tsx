@@ -94,7 +94,15 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
     <div style={{ backgroundColor: "var(--sabine-bg)", fontFamily: "'Open Sans', sans-serif" }}>
 
       {/* ── Hero ── */}
-      <section style={{ backgroundColor: "var(--sabine-navy)" }} className="pb-20 pt-16">
+      <section
+        className="pb-20 pt-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,95,0.72), rgba(26,43,95,0.82)), url('/ergonomic-tools/img-hero-office.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 40%",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="container">
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
@@ -265,7 +273,15 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-16" style={{ backgroundColor: "var(--sabine-navy)" }}>
+      <section
+        className="py-16"
+        style={{
+          backgroundImage: `linear-gradient(rgba(26,43,95,0.78), rgba(26,43,95,0.88)), url('/ergonomic-tools/img-green-wall.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="container text-center">
           <h2 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
             Ready to get started?
