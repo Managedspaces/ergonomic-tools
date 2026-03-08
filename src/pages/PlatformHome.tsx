@@ -61,17 +61,17 @@ const toolTags: Record<string, string> = {
 };
 
 const stats = [
-  { number: "4", label: "Compliance Tools" },
+  { number: "4", label: "Assessment Tools" },
   { number: "6", label: "Jurisdictions" },
-  { number: "100+", label: "Questions" },
-  { number: "PDF", label: "Audit Reports" },
+  { number: "SME", label: "Specialist" },
+  { number: "PDF", label: "Audit-Ready Reports" },
 ];
 
 const features = [
-  { icon: <FileText className="w-5 h-5" />, title: "Instant PDF Reports", desc: "Professional compliance reports generated immediately after each assessment — no waiting, no uploads." },
-  { icon: <Globe className="w-5 h-5" />, title: "6 Jurisdictions", desc: "Ireland, UK, Germany, Switzerland, Denmark, and Australia — correct legislation included automatically." },
-  { icon: <BarChart3 className="w-5 h-5" />, title: "Weighted Scoring", desc: "ISO-aligned weighted scoring engine produces consistent, auditable risk ratings across all tools." },
-  { icon: <Shield className="w-5 h-5" />, title: "Audit-Ready", desc: "Every report is structured to meet the documentation requirements of HSA, HSE, and ISO 45001 inspections." },
+  { icon: <FileText className="w-5 h-5" />, title: "Instant PDF Reports", desc: "Professional compliance documentation generated immediately on completion. Structured for HR records, audits, and regulatory inspections." },
+  { icon: <Globe className="w-5 h-5" />, title: "Cross-Border Compliance", desc: "Ireland, UK, Germany, Switzerland, Denmark, and Australia. The correct legislation is applied automatically based on your jurisdiction." },
+  { icon: <BarChart3 className="w-5 h-5" />, title: "Evidence-Based Scoring", desc: "Weighted scoring aligned with EU-OSHA, ISO 45001, and HSE Management Standards. Consistent, auditable, and defensible." },
+  { icon: <Shield className="w-5 h-5" />, title: "Built for SMEs", desc: "Proportionate, practical tools designed for businesses that want to meet their obligations without the overhead of an internal H&S department." },
 ];
 
 export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeProps) {
@@ -107,16 +107,18 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
               <p className="section-label section-label-light mb-4">
-                Workplace Compliance · Risk Assessment Tools
+                Remote &amp; Hybrid Workplace Wellbeing
               </p>
               <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight mb-6" style={{ fontFamily: "'Roboto', sans-serif" }}>
-                Protect your team.<br />
-                <span style={{ color: "var(--sabine-cta)" }}>Stay compliant.</span>
+                Ergonomics is not a<br />
+                wellness initiative.<br />
+                <span style={{ color: "var(--sabine-cta)" }}>It is a legal obligation.</span>
               </h1>
               <p className="text-lg mb-8 max-w-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
-                Four structured risk assessment tools covering ergonomics, home office safety,
-                psychosocial wellbeing, and custom hazard identification — with PDF compliance
-                reports for 6 jurisdictions.
+                Structured workplace assessments for SMEs with remote and hybrid teams.
+                Grounded in clinical expertise. Aligned with the legislation that applies
+                to your workforce. Compliance documentation generated as a natural output
+                — not an afterthought.
               </p>
               <div className="flex flex-wrap gap-4">
                 <button
@@ -128,14 +130,14 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
                 >
                   Start an Assessment <ArrowRight className="w-4 h-4" />
                 </button>
-                <button
+              <button
                   onClick={() => onNavigate?.("about")}
                   className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border"
                   style={{ borderColor: "rgba(255,255,255,0.3)", color: "#fff", fontFamily: "'Roboto', sans-serif", backgroundColor: "transparent" }}
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
-                  Learn More
+                  About Sabine
                 </button>
               </div>
             </motion.div>
@@ -164,10 +166,10 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
           <div className="text-center mb-10">
             <p className="section-label mb-2">Assessment Tools</p>
             <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-              Choose your assessment
+              Four tools. One platform. One specialist.
             </h2>
             <p className="text-sm mt-3 max-w-xl mx-auto" style={{ color: "var(--sabine-muted-text)" }}>
-              Each tool generates a professional PDF compliance report immediately on completion.
+              Each assessment covers a distinct dimension of remote and hybrid work risk. Run them independently or as a complete programme. Every report is audit-ready from the moment you download it.
             </p>
           </div>
 
@@ -255,7 +257,7 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
           <div className="text-center mb-10">
             <p className="section-label mb-2">Platform Features</p>
             <h2 className="text-3xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>
-              Built for real-world compliance
+              Practical. Evidence-based. Built for SMEs.
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -284,10 +286,10 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
       >
         <div className="container text-center">
           <h2 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-            Ready to get started?
+            Healthy people are a commercial advantage.
           </h2>
           <p className="text-base mb-8 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Open Sans', sans-serif" }}>
-            Complete your first assessment in under 15 minutes and download a professional PDF compliance report immediately.
+            When your people are well-supported, productivity rises, absence falls, and your liability exposure shrinks. Start with one assessment, or book a free conversation with Sabine to discuss the right approach for your team.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <button
@@ -306,7 +308,7 @@ export default function PlatformHome({ onNavigate, onSelectTool }: PlatformHomeP
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
             >
-              Talk to Us
+              Book a Conversation
             </button>
           </div>
         </div>

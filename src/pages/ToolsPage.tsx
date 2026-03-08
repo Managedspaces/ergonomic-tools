@@ -18,10 +18,10 @@ const tools = [
   {
     id: "ergonomic",
     icon: <Monitor className="w-7 h-7" />,
-    title: "Ergonomic Risk Assessment",
+    title: "Ergonomic Assessment",
     subtitle: "Tool #1 — Workstation & Posture",
-    description:
-      "A structured 32-question assessment covering workstation equipment, posture, work patterns, environment, vision, and psychosocial factors. Designed to identify musculoskeletal risks before they become injuries.",
+      description:
+      "Musculoskeletal disorders are the leading cause of workplace absence across Europe. This structured assessment identifies the physical and environmental factors that put your people at risk — before they become injuries, claims, or lost productivity. Covers workstation setup, posture, work patterns, lighting, display screen use, and psychosocial load.",
     categories: ["Workstation Equipment", "Posture & Position", "Work Patterns", "Environment", "Vision & Display", "Psychosocial Factors"],
     questions: 32,
     duration: "10–15 min",
@@ -36,10 +36,10 @@ const tools = [
   {
     id: "home-office",
     icon: <Home className="w-7 h-7" />,
-    title: "Home Office Risk Assessment",
+    title: "Home Office Assessment",
     subtitle: "Tool #2 — Remote Work Safety",
-    description:
-      "A 30-question assessment covering workspace environment, electrical safety, fire safety, ergonomics, work organisation, and trip hazards. Built for remote and hybrid workers completing assessments from home.",
+      description:
+      "When your people work from home, your duty of care follows them. This assessment gives remote and hybrid employees a structured way to evaluate their home working environment against the same standards that apply in the office — covering physical setup, electrical and fire safety, ergonomics, and working patterns.",
     categories: ["Workspace Environment", "Electrical Safety", "Fire Safety", "Ergonomics", "Work Organisation", "Trip & Fall Hazards"],
     questions: 30,
     duration: "8–12 min",
@@ -54,10 +54,10 @@ const tools = [
   {
     id: "psychosocial",
     icon: <Brain className="w-7 h-7" />,
-    title: "Psychosocial Risk Assessment",
+    title: "Psychosocial Assessment",
     subtitle: "Tool #3 — Stress & Wellbeing",
-    description:
-      "A 20-question confidential assessment covering workload and deadlines, role clarity and support, work environment and culture, work-life balance, and employee wellbeing. Aligned with ISO 45003 and HSE Management Standards.",
+      description:
+      "Psychosocial risk is the fastest-growing category of workplace harm in Europe, and the hardest to see. This confidential assessment gives employees a safe way to report workload pressure, role ambiguity, isolation, and wellbeing concerns — and gives you the structured evidence you need to act on it. Aligned with ISO 45003 and the HSE Management Standards Indicator Tool.",
     categories: ["Workload & Deadlines", "Role Clarity & Support", "Work Environment & Culture", "Work-Life Balance", "Employee Wellbeing"],
     questions: 20,
     duration: "6–10 min",
@@ -74,8 +74,8 @@ const tools = [
     icon: <AlertTriangle className="w-7 h-7" />,
     title: "Risk Assessment Builder",
     subtitle: "Tool #4 — Custom Hazard Register",
-    description:
-      "A flexible, guided 4-step builder for creating bespoke workplace risk assessments. Select hazard categories, identify specific hazards, rate likelihood and severity on a 5×5 matrix, assign control measures, and generate an audit-ready PDF register.",
+      description:
+      "Every business has hazards that do not fit a standard questionnaire. The Risk Assessment Builder lets you create a fully bespoke, audit-ready hazard register for any workplace scenario. Select from nine predefined hazard categories or define your own, rate each hazard on a 5×5 likelihood-severity matrix, assign control measures, and generate a landscape PDF register that satisfies your regulatory documentation obligations.",
     categories: ["Slips, Trips & Falls", "Manual Handling", "Electrical Hazards", "Fire & Emergency", "Chemical & Substances", "Machinery & Equipment", "Psychosocial Hazards", "Ergonomic Hazards", "Environmental Hazards"],
     questions: null,
     duration: "15–30 min",
@@ -116,11 +116,13 @@ export default function ToolsPage({ onSelectTool, onNavigate }: ToolsPageProps) 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <p className="section-label section-label-light mb-3">Assessment Tools</p>
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              Four tools. One platform.
+              Practical wellbeing tools for remote and hybrid teams.
             </h1>
             <p className="text-lg max-w-2xl leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
-              Each tool is independently deployable, generates jurisdiction-specific PDF compliance reports,
-              and is built to the same scoring architecture for consistent, auditable results.
+              Four structured assessments covering the physical, environmental, and psychosocial dimensions
+              of remote and hybrid work. Each one is grounded in clinical expertise, aligned with the
+              regulatory standards that apply to your workforce, and produces audit-ready documentation
+              as a natural output.
             </p>
           </motion.div>
         </div>
@@ -252,19 +254,19 @@ export default function ToolsPage({ onSelectTool, onNavigate }: ToolsPageProps) 
       >
         <div className="container text-center">
           <h2 className="text-3xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-            Need a custom assessment?
+            Not sure which tool is right for your business?
           </h2>
           <p className="text-base mb-8 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Open Sans', sans-serif" }}>
-            The Risk Assessment Builder lets you create fully bespoke hazard registers for any workplace scenario — no fixed question set required.
+            Book a free 20-minute conversation with Sabine to discuss your remote workforce profile and the most appropriate starting point. No obligation, no sales pressure.
           </p>
           <button
-            onClick={() => onSelectTool("risk-builder")}
+            onClick={() => onNavigate("contact")}
             className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white transition-all"
             style={{ backgroundColor: "var(--sabine-cta)", fontFamily: "'Roboto', sans-serif" }}
             onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta-hover)")}
             onMouseLeave={e => (e.currentTarget.style.backgroundColor = "var(--sabine-cta)")}
           >
-            Open Risk Builder <ArrowRight className="w-4 h-4" />
+            Book a Free Consultation <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </section>

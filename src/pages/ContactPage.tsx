@@ -17,23 +17,23 @@ interface ContactPageProps {
 const services = [
   {
     icon: <Briefcase className="w-5 h-5" />,
-    title: "Custom Tool Development",
-    desc: "Need a risk assessment tool tailored to your specific industry, hazard profile, or internal processes? We build bespoke modules that plug directly into the platform.",
+    title: "Workplace Risk Assessments",
+    desc: "Structured, audit-ready risk assessments for remote, hybrid, and office-based teams. Covering ergonomics, home office safety, psychosocial risk, and bespoke hazard registers.",
   },
   {
     icon: <Globe className="w-5 h-5" />,
-    title: "Jurisdiction Expansion",
-    desc: "Operating in a country not currently covered? We can add compliance templates for any jurisdiction with applicable health and safety legislation.",
+    title: "Cross-Border Compliance",
+    desc: "Operating across Germany, Switzerland, Austria, Ireland, the UK, or Australia? Sabine works with multilingual teams and understands the regulatory differences that matter.",
   },
   {
     icon: <Users className="w-5 h-5" />,
-    title: "Enterprise Deployment",
-    desc: "For organisations needing multi-user access, centralised reporting, and integration with existing HR or HSEQ systems — we offer enterprise deployment packages.",
+    title: "Remote & Hybrid Work Strategy",
+    desc: "Practical guidance for SMEs building sustainable remote and hybrid working policies — grounded in occupational health science, not generic HR templates.",
   },
   {
     icon: <MessageSquare className="w-5 h-5" />,
-    title: "H&S Consultancy",
-    desc: "Beyond the platform, Sabine Risk Consultancy provides hands-on occupational health and safety consultancy services for businesses across Ireland and Europe.",
+    title: "Occupational Health Consultancy",
+    desc: "Hands-on consultancy for businesses that need more than a digital tool. Sabine works directly with your team to identify, assess, and control workplace health risks.",
   },
 ];
 
@@ -93,11 +93,11 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <p className="section-label section-label-light mb-3">Get in Touch</p>
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: "'Roboto', sans-serif" }}>
-              Let's talk compliance.
+              Let's discuss your requirements.
             </h1>
             <p className="text-lg max-w-xl leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
-              Whether you need a custom assessment tool, enterprise deployment, or occupational health
-              consultancy — we're here to help.
+              You will speak directly with Sabine. No account managers, no sales team. A straightforward
+              conversation about your workforce, your obligations, and the most practical way to address them.
             </p>
           </motion.div>
         </div>
@@ -110,9 +110,9 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
           <div className="lg:col-span-2">
             <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--sabine-card)", border: "1px solid var(--sabine-border)", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
               <div className="px-8 py-6" style={{ borderBottom: "1px solid var(--sabine-border)", backgroundColor: "rgba(26,43,95,0.04)" }}>
-                <h2 className="text-xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>Send us a message</h2>
+                <h2 className="text-xl font-bold" style={{ fontFamily: "'Roboto', sans-serif", color: "var(--sabine-text)" }}>Send Sabine a message</h2>
                 <p className="text-sm mt-1" style={{ color: "var(--sabine-muted-text)", fontFamily: "'Open Sans', sans-serif" }}>
-                  We typically respond within one business day.
+                  Typically replied to within one business day. No automated responses.
                 </p>
               </div>
 
@@ -190,7 +190,7 @@ export default function ContactPage({ onNavigate }: ContactPageProps) {
                     <textarea
                       required rows={5} value={form.message}
                       onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      placeholder="Tell us about your requirements, organisation size, and any specific needs..."
+                      placeholder="Tell me about your team, your current setup, and what you're trying to solve..."
                       className={`${inputClass} ${focusRingStyle} resize-none`} style={inputStyle}
                     />
                   </div>
